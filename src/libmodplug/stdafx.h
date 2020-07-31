@@ -49,11 +49,9 @@ typedef unsigned int   uint32_t;
 #include <stdint.h>
 #endif
 
-#define srandom(_seed)  srand(_seed)
-#define random()        rand()
 #define sleep(_ms)      Sleep(_ms)
 
-inline void ProcessPlugins(int n) {}
+inline void ProcessPlugins(int n) { (void)n; }
 
 #undef strcasecmp
 #undef strncasecmp
@@ -75,11 +73,6 @@ inline void ProcessPlugins(int n) {}
 #include <string.h>
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
-#endif
-
-#ifdef __WATCOMC__
-#define srandom(_seed)  srand(_seed)
-#define random()        rand()
 #endif
 
 typedef int8_t CHAR;
@@ -112,17 +105,7 @@ typedef void VOID;
 
 #define WAVE_FORMAT_PCM 1
 
-#define  GHND   0
-#define GlobalFreePtr(p) free((void *)(p))
-inline int8_t * GlobalAllocPtr(unsigned int, size_t size)
-{
-  int8_t * p = (int8_t *) malloc(size);
-
-  if (p != NULL) memset(p, 0, size);
-  return p;
-}
-
-inline void ProcessPlugins(int n) {}
+inline void ProcessPlugins(int n) { (void)n; }
 
 #ifndef FALSE
 #define FALSE	false
