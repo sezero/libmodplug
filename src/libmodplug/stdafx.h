@@ -60,7 +60,9 @@ inline void ProcessPlugins(int n) {}
 #define strcasecmp(a,b)     _stricmp(a,b)
 #define strncasecmp(a,b,c)  _strnicmp(a,b,c)
 
+#if defined(_MSC_VER) || defined(__MINGW32__)
 #define HAVE_SINF 1
+#endif
 
 #ifndef isblank
 #define isblank(c) ((c) == ' ' || (c) == '\t')
