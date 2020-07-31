@@ -49,7 +49,7 @@ typedef unsigned int   uint32_t;
 #include <stdint.h>
 #endif
 
-#define sleep(_ms)      Sleep(_ms)
+#define sleep(_ms)      Sleep(_ms * 1000)
 
 inline void ProcessPlugins(int n) { (void)n; }
 
