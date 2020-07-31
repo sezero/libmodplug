@@ -34,8 +34,7 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <windowsx.h>
-#include <mmsystem.h>
+#include <mmsystem.h> /* for WAVE_FORMAT_PCM */
 #include <stdio.h>
 #include <malloc.h>
 #if defined(_MSC_VER) && (_MSC_VER < 1600)
