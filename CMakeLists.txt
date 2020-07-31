@@ -5,8 +5,29 @@ project(libmodplug)
 set(VERSION "0.8.9.0")
 
 option(BUILD_SHARED_LIBS "Build Shared Library (DLL)" OFF)
+option(EXPORT_CXX "Export C++ interface from library" ON)
+option(MIDIFMT_SUPPORT "Enable midi formats support" ON)
+option(WAV_SUPPORT "Enable wav formats support" ON)
+option(MMCMP_SUPPORT "Enable mmcmp and pp20 decompression support" ON)
 
 add_definitions(-DMODPLUG_BUILD)
+if(MIDIFMT_SUPPORT)
+  add_definitions(-DMIDIFMT_SUPPORT)
+endif()
+if(WAV_SUPPORT)
+  add_definitions(-DWAV_SUPPORT)
+endif()
+if(MMCMP_SUPPORT)
+  add_definitions(-DMMCMP_SUPPORT)
+endif()
+if(NOT EXPORT_CXX)
+  add_definitions(-DNO_CXX_EXPORTS)
+else()
+  set(HEADERS_CXX
+      src/libmodplug/it_defs.h
+      src/libmodplug/sndfile.h
+      src/libmodplug/stdafx.h)
+endif()
 
 include (CheckFunctionExists)
 include (CheckIncludeFile)
@@ -143,9 +164,7 @@ install(TARGETS modplug DESTINATION lib)
 # install the headers:
 install(FILES
   src/modplug.h
-  src/libmodplug/it_defs.h
-  src/libmodplug/sndfile.h
-  src/libmodplug/stdafx.h
+  ${HEADERS_CXX}
 
   DESTINATION
   include/libmodplug

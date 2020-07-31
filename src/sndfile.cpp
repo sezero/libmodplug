@@ -9,8 +9,6 @@
 #include "libmodplug/stdafx.h"
 #include "libmodplug/sndfile.h"
 
-#define MMCMP_SUPPORT
-
 #ifdef MMCMP_SUPPORT
 extern BOOL MMCMP_Unpack(LPCBYTE *ppMemFile, LPDWORD pdwMemLength);
 #endif
@@ -144,12 +142,16 @@ BOOL CSoundFile::Create(LPCBYTE lpStream, DWORD dwMemLength)
 		if ((!ReadXM(lpStream, dwMemLength))
 		 && (!ReadS3M(lpStream, dwMemLength))
 		 && (!ReadIT(lpStream, dwMemLength))
+#ifdef WAV_SUPPORT
 		 && (!ReadWav(lpStream, dwMemLength))
+#endif
 #ifndef MODPLUG_BASIC_SUPPORT
+#ifdef MIDIFMT_SUPPORT
 /* Sequencer File Format Support */
 		 && (!ReadABC(lpStream, dwMemLength))
 		 && (!ReadMID(lpStream, dwMemLength))
 		 && (!ReadPAT(lpStream, dwMemLength))
+#endif
 		 && (!ReadSTM(lpStream, dwMemLength))
 		 && (!ReadMed(lpStream, dwMemLength))
 		 && (!ReadMTM(lpStream, dwMemLength))

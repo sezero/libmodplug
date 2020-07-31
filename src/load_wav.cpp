@@ -7,6 +7,12 @@
 #include "stdafx.h"
 #include "sndfile.h"
 
+#ifndef WAV_SUPPORT
+BOOL CSoundFile::ReadWav(const BYTE *lpStream,DWORD dwMemLength) {
+	return FALSE;
+}
+#else
+
 #ifndef WAVE_FORMAT_EXTENSIBLE
 #define WAVE_FORMAT_EXTENSIBLE	0xFFFE
 #endif
@@ -139,19 +145,16 @@ BOOL CSoundFile::ReadWav(const BYTE *lpStream, DWORD dwMemLength)
 	return TRUE;
 }
 
-
 ////////////////////////////////////////////////////////////////////////
 // IMA ADPCM Support
 
 #pragma pack(1)
-
 typedef struct IMAADPCMBLOCK
 {
 	WORD sample;
 	BYTE index;
 	BYTE Reserved;
 } DVI_ADPCMBLOCKHEADER;
-
 #pragma pack()
 
 static const int gIMAUnpackTable[90] =
@@ -169,7 +172,6 @@ static const int gIMAUnpackTable[90] =
   15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794,
   32767, 0
 };
-
 
 BOOL IMAADPCMUnpack16(signed short *pdest, UINT nLen, LPBYTE psrc, DWORD dwBytes, UINT pkBlkAlign)
 //------------------------------------------------------------------------------------------------
@@ -215,3 +217,4 @@ BOOL IMAADPCMUnpack16(signed short *pdest, UINT nLen, LPBYTE psrc, DWORD dwBytes
 	}
 	return TRUE;
 }
+#endif // WAV_SUPPORT

@@ -37,6 +37,16 @@
 #include "stdafx.h"
 #include "sndfile.h"
 
+#ifndef MIDIFMT_SUPPORT
+BOOL CSoundFile::TestABC(const BYTE *lpStream, DWORD dwMemLength) {
+	return FALSE;
+}
+BOOL CSoundFile::ReadABC(const BYTE *lpStream, DWORD dwMemLength) {
+	return FALSE;
+}
+
+#else
+
 #include "load_pat.h"
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1300)
@@ -4873,3 +4883,4 @@ BOOL CSoundFile::ReadABC(const uint8_t *lpStream, DWORD dwMemLength)
 	ABC_Cleanup(h);	// we dont need it anymore
 	return 1;
 }
+#endif // MIDIFMT_SUPPORT

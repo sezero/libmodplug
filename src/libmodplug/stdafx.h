@@ -156,4 +156,10 @@ inline void ProcessPlugins(int n) {}
 #define MODPLUG_EXPORT
 #endif
 
+#if !defined(NO_CXX_EXPORTS)
+#define MODPLUG_EXPORTPP	MODPLUG_EXPORT
+#else
+#define MODPLUG_EXPORTPP
+#endif
+
 #endif
