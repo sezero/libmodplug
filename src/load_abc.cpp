@@ -39,7 +39,7 @@
 
 #include "load_pat.h"
 
-#if _MSC_VER >= 1600
+#if defined(_MSC_VER) && (_MSC_VER >= 1300)
 #define putenv _putenv
 #define strdup _strdup
 #endif
