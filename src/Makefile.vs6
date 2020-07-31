@@ -1,0 +1,77 @@
+# GNU Makefile for Win32 using MSVC6
+
+INCLUDES = -Ilibmodplug
+
+CPPFLAGS = -DMODPLUG_BUILD -DDLL_EXPORT
+CPPFLAGS+= -DNDEBUG
+CPPFLAGS+= -DNO_CXX_EXPORTS
+#CPPFLAGS+= -DMIDIFMT_SUPPORT
+#CPPFLAGS+= -DWAV_SUPPORT
+#CPPFLAGS+= -DMMCMP_SUPPORT
+
+CXX = cl
+LD = link
+RC = rc
+UNLINK = del $(subst /,\,$(1))
+
+CXXFLAGS= -nologo -O2 -MD -W3 -G6
+LDFLAGS = -nologo -dll -opt:WIN98
+LDLIBS = kernel32.lib user32.lib
+
+LIBNAME = libmodplug-1
+DLLNAME = $(LIBNAME).dll
+IMPNAME = $(LIBNAME).lib
+
+COMPILE=$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(INCLUDES)
+
+OBJ = sndmix.obj   \
+      sndfile.obj  \
+      snd_fx.obj   \
+      snd_flt.obj  \
+      snd_dsp.obj  \
+      fastmix.obj  \
+      mmcmp.obj    \
+      load_xm.obj  \
+      load_umx.obj \
+      load_ult.obj \
+      load_stm.obj \
+      load_s3m.obj \
+      load_ptm.obj \
+      load_okt.obj \
+      load_mtm.obj \
+      load_mod.obj \
+      load_med.obj \
+      load_mdl.obj \
+      load_it.obj  \
+      load_far.obj \
+      load_dsm.obj \
+      load_dmf.obj \
+      load_dbm.obj \
+      load_ams.obj \
+      load_amf.obj \
+      load_669.obj \
+      load_mt2.obj \
+      load_psm.obj \
+      load_abc.obj \
+      load_mid.obj \
+      load_pat.obj \
+      load_wav.obj \
+      modplug.obj
+
+all: $(DLLNAME)
+
+.PHONY: clean distclean
+.SUFFIXES:
+.SUFFIXES: .cpp .obj
+
+$(DLLNAME): $(OBJ)
+	$(LD) -out:$@ $(LDFLAGS) $(OBJ) $(LDLIBS)
+
+%.obj: %.cpp
+	$(COMPILE) -Fo$@ -c $<
+
+distclean: clean
+	-$(call UNLINK,$(DLLNAME))
+	-$(call UNLINK,$(IMPNAME))
+clean:
+	-$(call UNLINK,*.obj)
