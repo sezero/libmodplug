@@ -106,6 +106,7 @@ void CSoundFile::S3MConvert(MODCOMMAND *m, BOOL bIT) const
 }
 
 
+#ifndef MODPLUG_NO_FILESAVE
 void CSoundFile::S3MSaveConvert(UINT *pcmd, UINT *pprm, BOOL bIT) const
 //---------------------------------------------------------------------
 {
@@ -183,6 +184,7 @@ void CSoundFile::S3MSaveConvert(UINT *pcmd, UINT *pprm, BOOL bIT) const
 	*pcmd = command;
 	*pprm = param;
 }
+#endif // MODPLUG_NO_FILESAVE
 
 static DWORD boundInput(DWORD input, DWORD smin, DWORD smax)
 {

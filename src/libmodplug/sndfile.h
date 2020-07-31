@@ -43,7 +43,6 @@ typedef const BYTE * LPCBYTE;
 #define MAX_EQ_BANDS		6
 #define MAX_MIXPLUGINS		8
 
-
 #define MOD_TYPE_NONE		0x00
 #define MOD_TYPE_MOD		0x01
 #define MOD_TYPE_S3M		0x02
@@ -73,8 +72,6 @@ typedef const BYTE * LPCBYTE;
 #define MOD_TYPE_PAT		0x2000000
 #define MOD_TYPE_UMX		0x80000000 // Fake type
 #define MAX_MODTYPE		24
-
-
 
 // Channel flags:
 // Bits 0-7:	Sample Flags
@@ -107,7 +104,6 @@ typedef const BYTE * LPCBYTE;
 #define CHN_EXTRALOUD		0x2000000
 #define CHN_REVERB              0x4000000
 #define CHN_NOREVERB		0x8000000
-
 
 #define ENV_VOLUME              0x0001
 #define ENV_VOLSUSTAIN		0x0002
@@ -156,7 +152,6 @@ typedef const BYTE * LPCBYTE;
 #define CMD_PANNINGSLIDE		29
 #define CMD_SETENVPOSITION		30
 #define CMD_MIDI                        31
-
 
 // Volume Column commands
 #define VOLCMD_VOLUME			1
@@ -278,7 +273,6 @@ typedef const BYTE * LPCBYTE;
 #define SNDMIX_NOBACKWARDJUMPS	0x40000
 #define SNDMIX_MAXDEFAULTPAN	0x80000	// Used by the MOD loader
 
-
 // Reverb Types (GM2 Presets)
 enum {
 	REVERBTYPE_SMALLROOM,
@@ -290,7 +284,6 @@ enum {
 	NUM_REVERBTYPES
 };
 
-
 enum {
 	SRCMODE_NEAREST,
 	SRCMODE_LINEAR,
@@ -298,7 +291,6 @@ enum {
 	SRCMODE_POLYPHASE,
 	NUM_SRC_MODES
 };
-
 
 // Sample Struct
 typedef struct _MODINSTRUMENT
@@ -319,7 +311,6 @@ typedef struct _MODINSTRUMENT
 	BYTE nVibRate;
 	CHAR name[22];
 } MODINSTRUMENT;
-
 
 // Instrument Struct
 typedef struct _INSTRUMENTHEADER
@@ -368,7 +359,6 @@ typedef struct _INSTRUMENTHEADER
 	CHAR name[32];
 	CHAR filename[12];
 } INSTRUMENTHEADER;
-
 
 // Channel Struct
 typedef struct _MODCHANNEL
@@ -431,7 +421,6 @@ typedef struct _MODCHANNEL
 	BYTE nActiveMacro, nPadding;
 } MODCHANNEL;
 
-
 typedef struct _MODCHANNELSETTINGS
 {
 	UINT nPan;
@@ -440,7 +429,6 @@ typedef struct _MODCHANNELSETTINGS
 	UINT nMixPlugin;
         char szName[MAX_CHANNELNAME];        // changed from CHAR
 } MODCHANNELSETTINGS;
-
 
 typedef struct _MODCOMMAND
 {
@@ -520,7 +508,6 @@ enum {
 	MIDIOUT_PROGRAM,
 };
 
-
 typedef struct MODMIDICFG
 {
         char szMidiGlb[9*32];      // changed from CHAR
@@ -531,7 +518,6 @@ typedef struct MODMIDICFG
 #define NOTE_MAX                        120 //Defines maximum notevalue as well as maximum number of notes.
 
 typedef VOID (* LPSNDMIXHOOKPROC)(int *, unsigned long, unsigned long); // buffer, samples, channels
-
 
 
 //==============
@@ -666,14 +652,16 @@ public:
 	BOOL SaveS3M(LPCSTR lpszFileName, UINT nPacking=0);
 	BOOL SaveMod(LPCSTR lpszFileName, UINT nPacking=0);
 	BOOL SaveIT(LPCSTR lpszFileName, UINT nPacking=0);
-#endif // MODPLUG_NO_FILESAVE
-	// MOD Convert function
 	UINT GetBestSaveFormat() const;
 	UINT GetSaveFormats() const;
+#endif
+	// MOD Convert function
 	void ConvertModCommand(MODCOMMAND *) const;
 	void S3MConvert(MODCOMMAND *m, BOOL bIT) const;
+#ifndef MODPLUG_NO_FILESAVE
 	void S3MSaveConvert(UINT *pcmd, UINT *pprm, BOOL bIT) const;
 	WORD ModSaveCommand(const MODCOMMAND *m, BOOL bXM) const;
+#endif
 
 public:
 	// Real-time sound functions
@@ -759,8 +747,11 @@ public:
 	BOOL IsValidBackwardJump(UINT nStartOrder, UINT nStartRow, UINT nJumpOrder, UINT nJumpRow) const;
 	// Read/Write sample functions
 	signed char GetDeltaValue(signed char prev, UINT n) const { return (signed char)(prev + CompressionTable[n & 0x0F]); }
+#if !(defined(MODPLUG_NO_FILESAVE)||defined(NO_PACKING))
 	UINT PackSample(int &sample, int next);
 	BOOL CanPackSample(LPSTR pSample, UINT nLen, UINT nPacking, BYTE *result=NULL);
+#endif // NO_FILESAVE, NO_PACKING
+
 	UINT ReadSample(MODINSTRUMENT *pIns, UINT nFlags, LPCSTR pMemFile, DWORD dwMemLength);
 	BOOL DestroySample(UINT nSample);
 	BOOL DestroyInstrument(UINT nInstr);
@@ -848,7 +839,6 @@ typedef struct WAVEFILEHEADER
 	DWORD id_WAVE;
 } WAVEFILEHEADER;
 
-
 typedef struct WAVEFORMATHEADER
 {
 	DWORD id_fmt;		// "fmt "
@@ -861,13 +851,11 @@ typedef struct WAVEFORMATHEADER
 	WORD bitspersample;	// bits per sample (8/16)
 } WAVEFORMATHEADER;
 
-
 typedef struct WAVEDATAHEADER
 {
 	DWORD id_data;		// "data"
 	DWORD length;		// length of data
 } WAVEDATAHEADER;
-
 
 typedef struct WAVESMPLHEADER
 {
@@ -885,7 +873,6 @@ typedef struct WAVESMPLHEADER
 	DWORD cbSamplerData;
 } WAVESMPLHEADER;
 
-
 typedef struct SAMPLELOOPSTRUCT
 {
 	DWORD dwIdentifier;
@@ -896,13 +883,11 @@ typedef struct SAMPLELOOPSTRUCT
 	DWORD dwPlayCount;		// Loop Count, 0=infinite
 } SAMPLELOOPSTRUCT;
 
-
 typedef struct WAVESAMPLERINFO
 {
 	WAVESMPLHEADER wsiHdr;
 	SAMPLELOOPSTRUCT wsiLoops[2];
 } WAVESAMPLERINFO;
-
 
 typedef struct WAVELISTHEADER
 {
@@ -910,7 +895,6 @@ typedef struct WAVELISTHEADER
 	DWORD list_len;
 	DWORD info;		// "INFO"
 } WAVELISTHEADER;
-
 
 typedef struct WAVEEXTRAHEADER
 {

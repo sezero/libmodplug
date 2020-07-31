@@ -24,8 +24,10 @@ extern void ITUnpack8Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, DW
 extern void ITUnpack16Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, DWORD dwMemLength, BOOL b215);
 
 
-#define MAX_PACK_TABLES		3
+#ifndef MODPLUG_NO_FILESAVE
+#ifndef NO_PACKING
 
+#define MAX_PACK_TABLES		3
 
 // Compression table
 static const signed char UnpackTable[MAX_PACK_TABLES][16] =
@@ -40,6 +42,8 @@ static const signed char UnpackTable[MAX_PACK_TABLES][16] =
 	{0, 1, 2, 3, 5, 7, 12, 19,
 	-1, -2, -3, -5, -7, -12, -19, -31}
 };
+#endif
+#endif
 
 
 //////////////////////////////////////////////////////////
@@ -753,6 +757,7 @@ void CSoundFile::LoopPattern(int nPat, int nRow)
 }
 
 
+#ifndef MODPLUG_NO_FILESAVE
 UINT CSoundFile::GetBestSaveFormat() const
 //----------------------------------------
 {
@@ -766,7 +771,6 @@ UINT CSoundFile::GetBestSaveFormat() const
 		return MOD_TYPE_XM;
 	return MOD_TYPE_IT;
 }
-
 
 UINT CSoundFile::GetSaveFormats() const
 //-------------------------------------
@@ -786,6 +790,7 @@ UINT CSoundFile::GetSaveFormats() const
 	}
 	return n;
 }
+#endif // MODPLUG_NO_FILESAVE
 
 
 UINT CSoundFile::GetSampleName(UINT nSample,LPSTR s) const
@@ -816,6 +821,8 @@ UINT CSoundFile::GetInstrumentName(UINT nInstr,LPSTR s) const
 	return strlen(sztmp);
 }
 
+
+#ifndef MODPLUG_NO_FILESAVE
 
 #ifndef NO_PACKING
 UINT CSoundFile::PackSample(int &sample, int next)
@@ -876,8 +883,6 @@ BOOL CSoundFile::CanPackSample(LPSTR pSample, UINT nLen, UINT nPacking, BYTE *re
 	return (dwResult >= nPacking) ? TRUE : FALSE;
 }
 #endif // NO_PACKING
-
-#ifndef MODPLUG_NO_FILESAVE
 
 UINT CSoundFile::WriteSample(FILE *f, MODINSTRUMENT *pins, UINT nFlags, UINT nMaxLen)
 //-----------------------------------------------------------------------------------
