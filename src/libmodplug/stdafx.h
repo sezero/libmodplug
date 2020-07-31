@@ -77,6 +77,11 @@ inline void ProcessPlugins(int n) {}
 #include <malloc.h>
 #endif
 
+#ifdef __WATCOMC__
+#define srandom(_seed)  srand(_seed)
+#define random()        rand()
+#endif
+
 typedef int8_t CHAR;
 typedef uint8_t UCHAR;
 typedef uint8_t* PUCHAR;
