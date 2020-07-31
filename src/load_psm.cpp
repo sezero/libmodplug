@@ -86,7 +86,7 @@ typedef struct _PSMSAMPLE
 
 #pragma pack()
 
-void swap_PSMSAMPLE(PSMSAMPLE* p){
+static void swap_PSMSAMPLE(PSMSAMPLE* p){
 	p->smpid = bswapLE32(p->smpid);
 	p->length = bswapLE32(p->length);
 	p->loopstart = bswapLE32(p->loopstart);
