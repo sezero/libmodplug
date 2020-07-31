@@ -88,7 +88,7 @@ typedef uint32_t* LPDWORD;
 typedef uint16_t WORD;
 typedef uint8_t BYTE;
 typedef uint8_t* LPBYTE;
-typedef bool BOOL;
+typedef bool BOOL; /* FIXME: must be 'int' */
 typedef char* LPSTR;
 typedef void* LPVOID;
 typedef uint16_t* LPWORD;
