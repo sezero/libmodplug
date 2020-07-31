@@ -417,7 +417,7 @@ typedef struct _MODCHANNEL
 	BYTE nRowNote, nRowInstr;
 	BYTE nRowVolCmd, nRowVolume;
 	BYTE nRowCommand, nRowParam;
-	BYTE nLeftVU, nRightVU;
+	BYTE nLeftVU, nRightVU; /* NOT USED! */
 	BYTE nActiveMacro, nPadding;
 } MODCHANNEL;
 
@@ -637,7 +637,6 @@ public:
 	BOOL ReadAMF(LPCBYTE lpStream, DWORD dwMemLength);
 	BOOL ReadMT2(LPCBYTE lpStream, DWORD dwMemLength);
 	BOOL ReadPSM(LPCBYTE lpStream, DWORD dwMemLength);
-	BOOL ReadJ2B(LPCBYTE lpStream, DWORD dwMemLength);
 	BOOL ReadUMX(LPCBYTE lpStream, DWORD dwMemLength);
 	BOOL ReadABC(LPCBYTE lpStream, DWORD dwMemLength);
 	BOOL TestABC(LPCBYTE lpStream, DWORD dwMemLength);
@@ -646,22 +645,9 @@ public:
 	BOOL ReadPAT(LPCBYTE lpStream, DWORD dwMemLength);
 	BOOL TestPAT(LPCBYTE lpStream, DWORD dwMemLength);
 	// Save Functions
-#ifndef MODPLUG_NO_FILESAVE
-	UINT WriteSample(FILE *f, MODINSTRUMENT *pins, UINT nFlags, UINT nMaxLen=0);
-	BOOL SaveXM(LPCSTR lpszFileName, UINT nPacking=0);
-	BOOL SaveS3M(LPCSTR lpszFileName, UINT nPacking=0);
-	BOOL SaveMod(LPCSTR lpszFileName, UINT nPacking=0);
-	BOOL SaveIT(LPCSTR lpszFileName, UINT nPacking=0);
-	UINT GetBestSaveFormat() const;
-	UINT GetSaveFormats() const;
-#endif
 	// MOD Convert function
 	void ConvertModCommand(MODCOMMAND *) const;
 	void S3MConvert(MODCOMMAND *m, BOOL bIT) const;
-#ifndef MODPLUG_NO_FILESAVE
-	void S3MSaveConvert(UINT *pcmd, UINT *pprm, BOOL bIT) const;
-	WORD ModSaveCommand(const MODCOMMAND *m, BOOL bXM) const;
-#endif
 
 public:
 	// Real-time sound functions
@@ -747,10 +733,6 @@ public:
 	BOOL IsValidBackwardJump(UINT nStartOrder, UINT nStartRow, UINT nJumpOrder, UINT nJumpRow) const;
 	// Read/Write sample functions
 	signed char GetDeltaValue(signed char prev, UINT n) const { return (signed char)(prev + CompressionTable[n & 0x0F]); }
-#if !(defined(MODPLUG_NO_FILESAVE)||defined(NO_PACKING))
-	UINT PackSample(int &sample, int next);
-	BOOL CanPackSample(LPSTR pSample, UINT nLen, UINT nPacking, BYTE *result=NULL);
-#endif // NO_FILESAVE, NO_PACKING
 
 	UINT ReadSample(MODINSTRUMENT *pIns, UINT nFlags, LPCSTR pMemFile, DWORD dwMemLength);
 	BOOL DestroySample(UINT nSample);
@@ -793,11 +775,6 @@ public:
 	static void FreeSample(LPVOID p);
 	static UINT Normalize24BitBuffer(LPBYTE pbuffer, UINT cbsizebytes, DWORD lmax24, DWORD dwByteInc);
 };
-
-
-// inline DWORD BigEndian(DWORD x) { return ((x & 0xFF) << 24) | ((x & 0xFF00) << 8) | ((x & 0xFF0000) >> 8) | ((x & 0xFF000000) >> 24); }
-// inline WORD BigEndianW(WORD x) { return (WORD)(((x >> 8) & 0xFF) | ((x << 8) & 0xFF00)); }
-
 
 //////////////////////////////////////////////////////////
 // WAVE format information
@@ -941,6 +918,9 @@ typedef struct WAVEEXTRAHEADER
 int _muldiv(long a, long b, long c);
 int _muldivr(long a, long b, long c);
 
+
+// inline DWORD BigEndian(DWORD x) { return ((x & 0xFF) << 24) | ((x & 0xFF00) << 8) | ((x & 0xFF0000) >> 8) | ((x & 0xFF000000) >> 24); }
+// inline WORD BigEndianW(WORD x) { return (WORD)(((x >> 8) & 0xFF) | ((x << 8) & 0xFF00)); }
 
 // Byte swapping functions from the GNU C Library and libsdl
 
