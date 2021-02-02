@@ -11,7 +11,7 @@ CPPFLAGS+= -DNO_CXX_EXPORTS
 #CPPFLAGS+= -DMMCMP_SUPPORT
 INCLUDES = -Ilibmodplug
 
-CXXFLAGS = -zq -bt=os2 -bm -fp5 -fpi87 -mf -oeatxh -w4 -ei -j -zp8
+CXXFLAGS = -zq -bt=os2 -bm -fp5 -fpi87 -mf -oeatxh -w3 -ei -j -zp8
 # -5s (or -5r) : Pentium stack (or register) calling conventions
 CXXFLAGS+= -5s
 CXXFLAGS+= -bd
