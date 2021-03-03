@@ -7,6 +7,7 @@
 #include "stdafx.h"
 #include <stdlib.h>
 #include "sndfile.h"
+#define SNDFX_C
 #include "tables.h"
 
 #ifdef _MSC_VER
