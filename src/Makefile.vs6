@@ -1,28 +1,28 @@
-# GNU Makefile for Win32 using MSVC6
+# Makefile for Win32 using Visual Studio 6:
+#	nmake -f Makefile.vs6
 
 INCLUDES = -Ilibmodplug
 
 CPPFLAGS = -DMODPLUG_BUILD -DDLL_EXPORT
-CPPFLAGS+= -DNDEBUG
-CPPFLAGS+= -DNO_CXX_EXPORTS
-#CPPFLAGS+= -DMIDIFMT_SUPPORT
-#CPPFLAGS+= -DWAV_SUPPORT
-#CPPFLAGS+= -DMMCMP_SUPPORT
+CPPFLAGS = $(CPPFLAGS) -DNDEBUG
+CPPFLAGS = $(CPPFLAGS) -DNO_CXX_EXPORTS
+#CPPFLAGS = $(CPPFLAGS) -DMIDIFMT_SUPPORT
+#CPPFLAGS = $(CPPFLAGS) -DWAV_SUPPORT
+#CPPFLAGS = $(CPPFLAGS) -DMMCMP_SUPPORT
 
 CXX = cl
 LD = link
 RC = rc
-UNLINK = del $(subst /,\,$(1))
 
 CXXFLAGS= -nologo -O2 -MD -W3 -G6
 LDFLAGS = -nologo -dll -opt:WIN98
-LDLIBS = kernel32.lib user32.lib
+LDLIBS  = kernel32.lib user32.lib
 
 LIBNAME = libmodplug-1
 DLLNAME = $(LIBNAME).dll
 IMPNAME = $(LIBNAME).lib
 
-COMPILE=$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(INCLUDES)
+COMPILE = $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(INCLUDES)
 
 OBJ = sndmix.obj   \
       sndfile.obj  \
@@ -61,18 +61,13 @@ OBJ = sndmix.obj   \
 
 all: $(DLLNAME)
 
-.PHONY: clean distclean
-.SUFFIXES:
-.SUFFIXES: .cpp .obj
-
 $(DLLNAME): $(OBJ)
 	$(LD) -out:$@ $(LDFLAGS) $(OBJ) $(LDLIBS)
 
-%.obj: %.cpp
-	$(COMPILE) -Fo$@ -c $<
+.cpp.obj:
+	$(COMPILE) -c -Fo$*.obj $<
 
 distclean: clean
-	-$(call UNLINK,$(DLLNAME))
-	-$(call UNLINK,$(IMPNAME))
+	-del $(DLLNAME) $(IMPNAME)
 clean:
-	-$(call UNLINK,*.obj)
+	-del *.obj
