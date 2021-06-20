@@ -50,6 +50,7 @@ OBJ = sndmix.obj   &
       load_amf.obj &
       load_669.obj &
       load_mt2.obj &
+      load_gdm.obj &
       load_psm.obj &
       load_abc.obj &
       load_mid.obj &
